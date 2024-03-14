@@ -1378,10 +1378,13 @@ export function getOfficeAddinFramework(inputs: Inputs): string {
     inputs[QuestionNames.OfficeAddinFramework]
   ) {
     return inputs[QuestionNames.OfficeAddinFramework];
-  } else if (projectType === ProjectTypeOptions.officeXMLAddin().id) {
-    return "default";
-  } else {
+  } else if (
+    projectType === ProjectTypeOptions.officeXMLAddin().id &&
+    inputs[QuestionNames.OfficeAddinHost] !== OfficeAddinHostOptions.outlook().id
+  ) {
     return "default_old";
+  } else {
+    return "default";
   }
 }
 
