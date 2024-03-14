@@ -1382,9 +1382,9 @@ export function getOfficeAddinFramework(inputs: Inputs): string {
     projectType === ProjectTypeOptions.officeXMLAddin().id &&
     inputs[QuestionNames.OfficeAddinHost] !== OfficeAddinHostOptions.outlook().id
   ) {
-    return "default_old";
-  } else {
     return "default";
+  } else {
+    return "default_old";
   }
 }
 
