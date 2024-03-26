@@ -560,6 +560,7 @@ export class CapabilityOptions {
       if (isOutlookAddin || isOfficeXMLAddinForOutlook) {
         items.push(CapabilityOptions.outlookAddinImport());
       } else if (isOfficeAddin) {
+        items.push(CapabilityOptions.officeContentAddin());
         items.push(CapabilityOptions.officeAddinImport());
       }
     } else {
@@ -669,6 +670,14 @@ export class CapabilityOptions {
       description: getLocalizedString(
         "core.createProjectQuestion.option.description.previewOnWindow"
       ),
+    };
+  }
+
+  static officeContentAddin(): OptionItem {
+    return {
+      id: "office-content-addin",
+      label: getLocalizedString("core.officeContentAddin.label"),
+      detail: getLocalizedString("core.officeContentAddin.detail"),
     };
   }
 
@@ -1347,13 +1356,14 @@ export function officeAddinHostingQuestion(): SingleSelectQuestion {
   };
 }
 
-export function OfficeAddinFrameworkQuestion(): SingleSelectQuestion {
-  return {
+export function officeAddinFrameworkQuestion(): SingleSelectQuestion {
+  const officeAddinFrameworkQuestion: SingleSelectQuestion = {
     type: "singleSelect",
     name: QuestionNames.OfficeAddinFramework,
     cliShortName: "f",
     cliDescription: "Framework for WXP extension.",
     title: getLocalizedString("core.createProjectQuestion.projectType.officeAddin.framework.title"),
+    dynamicOptions: getAddinFrameworkOptions,
     staticOptions: [
       { id: "default", label: "Default" },
       { id: "react", label: "React" },
@@ -1361,8 +1371,36 @@ export function OfficeAddinFrameworkQuestion(): SingleSelectQuestion {
     placeholder: getLocalizedString(
       "core.createProjectQuestion.projectType.officeAddin.framework.placeholder"
     ),
-    default: "default",
+    default: (inputs: Inputs) => {
+      return getAddinFrameworkOptions(inputs)[0].id;
+    },
+    skipSingleOption: true,
   };
+  return officeAddinFrameworkQuestion;
+}
+
+export function getAddinFrameworkOptions(inputs: Inputs): OptionItem[] {
+  const projectType = inputs[QuestionNames.ProjectType];
+  const capabilities = inputs[QuestionNames.Capabilities];
+  const host = inputs[QuestionNames.OfficeAddinHost];
+  if (
+    projectType === ProjectTypeOptions.outlookAddin().id ||
+    (projectType === ProjectTypeOptions.officeXMLAddin().id &&
+      host === OfficeAddinHostOptions.outlook().id)
+  ) {
+    return [{ id: "default", label: "Default" }];
+  } else if (
+    (projectType === ProjectTypeOptions.officeAddin().id &&
+      capabilities === CapabilityOptions.officeContentAddin().id) ||
+    capabilities === CapabilityOptions.officeAddinImport().id
+  ) {
+    return [{ id: "default", label: "Default" }];
+  } else {
+    return [
+      { id: "default", label: "Default" },
+      { id: "react", label: "React" },
+    ];
+  }
 }
 
 /**
@@ -2461,14 +2499,16 @@ export function capabilitySubTree(): IQTreeNode {
         ],
       },
       {
-        // WXP addin framework
+        // Office addin framework for json manifest
+        data: officeAddinFrameworkQuestion(),
         condition: (inputs: Inputs) => {
           return (
-            inputs[QuestionNames.ProjectType] === ProjectTypeOptions.officeAddin().id &&
-            inputs[QuestionNames.Capabilities] !== CapabilityOptions.officeAddinImport().id
+            (inputs[QuestionNames.ProjectType] === ProjectTypeOptions.officeAddin().id &&
+              inputs[QuestionNames.Capabilities] !== CapabilityOptions.officeAddinImport().id) ||
+            (inputs[QuestionNames.ProjectType] === ProjectTypeOptions.officeAddin().id &&
+              inputs[QuestionNames.Capabilities] !== CapabilityOptions.officeContentAddin().id)
           );
         },
-        data: OfficeAddinFrameworkQuestion(),
       },
       {
         // root folder
