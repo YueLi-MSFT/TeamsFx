@@ -92,10 +92,6 @@ export const OfficeAddinProjectConfig: IOfficeAddinProjectConfig = {
           typescript: "https://aka.ms/teams-toolkit/office-addin-content/ts-default",
           javascript: "https://aka.ms/teams-toolkit/office-addin-content/js-default",
         },
-        react: {
-          typescript: "https://aka.ms/teams-toolkit/office-addin-content/ts-react",
-          javascript: "https://aka.ms/teams-toolkit/office-addin-content/js-react",
-        },
       },
       manifestPath: "manifest.json",
     },
