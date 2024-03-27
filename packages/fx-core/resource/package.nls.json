@@ -291,7 +291,7 @@
   "core.createProjectQuestion.projectType.officeAddin.label": "Office Add-in",
   "core.createProjectQuestion.projectType.officeAddin.title": "App Features Using an Office Add-in",
   "core.createProjectQuestion.projectType.officeAddin.framework.title": "Framework",
-  "core.createProjectQuestion.projectType.officeAddin.framework.placeholder": "Select a framework.",
+  "core.createProjectQuestion.projectType.officeAddin.framework.placeholder": "Select a framework",
   "core.createProjectQuestion.projectType.tab.detail": "Embed your own web content in Teams, Outlook, and the Microsoft 365 app",
   "core.createProjectQuestion.projectType.tab.title": "App Features Using a Tab",
   "core.createProjectQuestion.projectType.copilotPlugin.detail": "Create a plugin to extend Microsoft Copilot for Microsoft 365 using your APIs",
